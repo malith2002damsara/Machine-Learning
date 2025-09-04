@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Iris Flower Predictor</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      padding: 20px;
+      color: #333;
+    }
+
+    .container {
+      display: flex;
+      max-width: 1000px;
+      width: 100%;
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: 20px;
+      overflow: hidden;
+      box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2);
+    }
+
+    .illustration {
+      flex: 1;
+      background: linear-gradient(120deg, #8e44ad, #3498db);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      padding: 20px;
+      color: white;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .illustration::before {
+      content: "";
+      position: absolute;
+      width: 200px;
+      height: 100px;
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 50%;
+      top: -50px;
+      left: -50px;
+    }
+
+    .illustration::after {
+      content: "";
+      position: absolute;
+      width: 150px;
+      height: 150px;
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 50%;
+      bottom: -50px;
+      right: -50px;
+    }
+
+    .flower {
+      font-size: 100px;
+      margin-bottom: 20px;
+      animation: float 5s ease-in-out infinite;
+    }
+
+    .illustration h2 {
+      font-size: 28px;
+      margin-bottom: 15px;
+      text-align: center;
+      text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.3);
+    }
+
+    .illustration p {
+      text-align: center;
+      max-width: 300px;
+      line-height: 1.6;
+      font-size: 16px;
+    }
+
+    .card {
+      flex: 1;
+      padding: 40px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+
+    .card h2 {
+      color: #2c3e50;
+      margin-bottom: 25px;
+      font-size: 28px;
+      position: relative;
+      display: inline-block;
+    }
+
+    .card h2::after {
+      content: "";
+      position: absolute;
+      bottom: -10px;
+      left: 0;
+      width: 50px;
+      height: 4px;
+      background: linear-gradient(to right, #6a11cb, #2575fc);
+      border-radius: 2px;
+    }
+
+    .input-group {
+      position: relative;
+      margin-bottom: 25px;
+    }
+
+    .input-group i {
+      position: absolute;
+      left: 15px;
+      top: 15px;
+      color: #6c757d;
+      font-size: 18px;
+    }
+
+    input {
+      width: 100%;
+      padding: 15px 15px 15px 50px;
+      border: 2px solid #e2e8f0;
+      border-radius: 12px;
+      font-size: 16px;
+      transition: all 0.3s ease;
+      background: #f8fafc;
+    }
+
+    input:focus {
+      outline: none;
+      border-color: #6a11cb;
+      box-shadow: 0 0 0 3px rgba(106, 17, 203, 0.2);
+      background: white;
+    }
+
+    input::placeholder {
+      color: #a0aec0;
+    }
+
+    button {
+      margin-top: 15px;
+      padding: 16px;
+      width: 100%;
+      background: linear-gradient(to right, #6a11cb, #2575fc);
+      color: white;
+      font-size: 18px;
+      font-weight: 600;
+      border: none;
+      border-radius: 12px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 15px rgba(106, 17, 203, 0.3);
+    }
+
+    button:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 7px 20px rgba(106, 17, 203, 0.4);
+    }
+
+    button:active {
+      transform: translateY(0);
+    }
+
+    .result {
+      margin-top: 30px;
+      padding: 20px;
+      border-radius: 12px;
+      background: #f0f9ff;
+      text-align: center;
+      animation: fadeIn 0.5s ease-out;
+      border-left: 5px solid #2575fc;
+    }
+
+    .result h3 {
+      color: #2575fc;
+      margin-bottom: 10px;
+      font-size: 20px;
+    }
+
+    .prediction {
+      font-size: 22px;
+      font-weight: bold;
+      color: #2c3e50;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+    }
+
+    .flower-icon {
+      font-size: 28px;
+      color: #e84393;
+    }
+
+    .info {
+      margin-top: 25px;
+      font-size: 14px;
+      color: #718096;
+      text-align: center;
+    }
+
+    @keyframes float {
+      0%, 100% {
+        transform: translateY(0);
+      }
+      50% {
+        transform: translateY(-15px);
+      }
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(10px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    /* Responsive design */
+    @media (max-width: 768px) {
+      .container {
+        flex-direction: column;
+        max-width: 450px;
+      }
+      
+      .illustration {
+        padding: 30px 20px;
+      }
+      
+      .illustration h2 {
+        font-size: 24px;
+      }
+      
+      .card {
+        padding: 30px 25px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="illustration">
+      <div class="flower">🌸</div>
+      <h2>Iris Flower Classification</h2>
+      <p>Enter the measurements of an iris flower to predict its species using machine learning.</p>
+    </div>
+    
+    <div class="card">
+      <h2>Iris Flower Predictor</h2>
+      <form method="post">
+        <div class="input-group">
+          <i class="fas fa-ruler-vertical"></i>
+          <input type="text" name="sepal_length" placeholder="Sepal Length (cm)" required>
+        </div>
+        
+        <div class="input-group">
+          <i class="fas fa-ruler-horizontal"></i>
+          <input type="text" name="sepal_width" placeholder="Sepal Width (cm)" required>
+        </div>
+        
+        <div class="input-group">
+          <i class="fas fa-ruler-vertical"></i>
+          <input type="text" name="petal_length" placeholder="Petal Length (cm)" required>
+        </div>
+        
+        <div class="input-group">
+          <i class="fas fa-ruler-horizontal"></i>
+          <input type="text" name="petal_width" placeholder="Petal Width (cm)" required>
+        </div>
+        
+        <button type="submit">
+          <i class="fas fa-brain"></i> Predict Species
+        </button>
+      </form>
+      
+      {% if prediction %}
+      <div class="result">
+        <h3>Prediction Result</h3>
+        <div class="prediction">
+          <span class="flower-icon">🌼</span>
+          {{ prediction }}
+        </div>
+      </div>
+      {% endif %}
+      
+      <div class="info">
+        <p>This predictor uses machine learning to classify iris flowers into three species: Setosa, Versicolor, and Virginica.</p>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Add input validation to allow only numbers and decimal points
+    document.querySelectorAll('input').forEach(input => {
+      input.addEventListener('input', function() {
+        this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');
+      });
+    });
+  </script>
+</body>
+</html>
